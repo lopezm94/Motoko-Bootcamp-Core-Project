@@ -1,91 +1,30 @@
+// The minter is the representation of the minter contract in main.mo but in JavaScript
 import { minter } from "../../declarations/minter";
-const mintamount = 0; //Will be changed in the future so user has to pay to mint
 
+// This is library to use with principal that is provided by Dfinity
+import { Principal } from "@dfinity/principal";
 
+// For beginners : This is really basic Javascript code that add an event to the "Mint" button so that the mint_nft function is called when the button is clicked.
+const mint_button = document.getElementById("mint");
+mint_button.addEventListener("click", mint_nft);
 
-function main() {
-  const button = document.getElementById("connect");
-
-  const addbutton = document.getElementById("add");
-
-  const generatebut = document.getElementById("generate");
-
-  button.addEventListener("click", onButtonPress);
-  addbutton.addEventListener("click", getBalances);
-  generatebut.addEventListener("click", genrateNft);
-}
-
-const canisters = ["ai7t5-aibaq-aaaaa-aaaaa-c"]; //for mainnet deployment
-const host = "https://mainnet.dfinity.network"; //for mainnet deployment
-
-let princOfCaller = "";
-
-async function onButtonPress(el) {
-  el.target.disabled = true;
-
-  const isConnected = await window.ic.plug.isConnected();
-
-  if(!isConnected) {
-    await window.ic.plug.requestConnect();
-  }
-
-  console.log('requesting connection..');
-
-  if (!window.ic.plug.agent) {
-    await window.ic.plug.createAgent();
-    console.log('agent created');
-  }
-  
-  const prin = await window.ic.plug.agent.getPrincipal();
-  var principalId = prin.toString();
-  princOfCaller = prin;
-
-  if (isConnected) {
-    console.log('Plug wallet is connected');
-  } else {
-    console.log('Plug wallet connection was refused')
-  }
-
-  setTimeout(function () {
-    el.target.disabled = false;
-  }, 5000);
-}
-
-async function genrateNft() {
+async function mint_nft() {
+  // Get the url of the image from the input field
   const name = document.getElementById("name").value.toString();
-  const mint = await minter.mint(name);
-  console.log("minted...");
-  const mintId = mint.toString();
-  console.log("this id is" + mintId);
+  console.log("The url we are trying to mint is " + name);
 
-  document.getElementById("nft").src = await minter.tokenURI(mint);
-  document.getElementById("greeting").innerText = "this nft owner is " + princOfCaller + "\nthis token id is " + mintId;
+  // Get the principal from the input field.
+  const principal_string = document.getElementById("principal").value.toString();
+  const principal = Principal.fromText(principal_string);
+
+  // Mint the image by calling the mint_principal function of the minter.
+  const mintId = await minter.mint_principal(name, principal);
+  console.log("The id is " + Number(mintId));
+  // Get the id of the minted image.
+
+  // Get the url by asking the minter contract.
+  document.getElementById("nft").src = await minter.tokenURI(mintId);
+
+  // Show some information about the minted image.
+  document.getElementById("greeting").innerText = "this nft owner is " + principal_string + "\nthis token id is " + Number(mintId);
 }
-
-async function getBalances() {
-  // doenst work yet
-
-  const name = document.getElementById("add").value.toString();
-  const balances = await minter.balanceOf(princOfCaller);
-  
-  console.log("balances");
-
-
-
-}
-
-
-
-document.addEventListener("DOMContentLoaded", main);
-
-  //const name = document.getElementById("name").value.toString();
-
-  //button.setAttribute("disabled", true);
-
-  // Interact with foo actor, calling the greet method
-  //const greeting = await minter.greet(name);
-
-  //button.removeAttribute("disabled");
-
-  
-

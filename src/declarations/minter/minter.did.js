@@ -10,6 +10,7 @@ export const idlFactory = ({ IDL }) => {
         [],
       ),
     'mint' : IDL.Func([IDL.Text], [IDL.Nat], []),
+    'mint_principal' : IDL.Func([IDL.Text, IDL.Principal], [IDL.Nat], []),
     'name' : IDL.Func([], [IDL.Text], ['query']),
     'ownerOf' : IDL.Func([TokenId], [IDL.Opt(IDL.Principal)], []),
     'setApprovalForAll' : IDL.Func([IDL.Principal, IDL.Bool], [], ['oneway']),

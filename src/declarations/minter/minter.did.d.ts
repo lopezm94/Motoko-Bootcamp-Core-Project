@@ -5,6 +5,7 @@ export interface DRC721 {
   'getApproved' : (arg_0: bigint) => Promise<Principal>,
   'isApprovedForAll' : (arg_0: Principal, arg_1: Principal) => Promise<boolean>,
   'mint' : (arg_0: string) => Promise<bigint>,
+  'mint_principal' : (arg_0: string, arg_1: Principal) => Promise<bigint>,
   'name' : () => Promise<string>,
   'ownerOf' : (arg_0: TokenId) => Promise<[] | [Principal]>,
   'setApprovalForAll' : (arg_0: Principal, arg_1: boolean) => Promise<

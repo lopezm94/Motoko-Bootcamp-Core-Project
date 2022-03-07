@@ -5,6 +5,7 @@ service : {
   getApproved: (nat) -> (principal);
   isApprovedForAll: (principal, principal) -> (bool);
   mint: (text) -> (nat);
+  mint_principal: (text, principal) -> (nat);
   name: () -> (text) query;
   ownerOf: (TokenId) -> (opt principal);
   setApprovalForAll: (principal, bool) -> () oneway;

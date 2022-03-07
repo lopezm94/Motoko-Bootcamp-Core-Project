@@ -106,9 +106,17 @@ actor class DRC721(_name : Text, _symbol : Text) {
         _transfer(from, to, tokenId);
     };
 
-    public shared(msg) func mint(uri : Text) : async Nat {
+    // Mint without authentication
+    public func mint_principal(uri : Text, principal : Principal) : async Nat {
         tokenPk += 1;
-        _mint(msg.caller, tokenPk, uri);
+        _mint(principal, tokenPk, uri);
+        return tokenPk;
+    };
+
+    // Mint requires authentication in the frontend as we are using caller.
+     public shared ({caller}) func mint(uri : Text) : async Nat {
+        tokenPk += 1;
+        _mint(caller, tokenPk, uri);
         return tokenPk;
     };
 
