@@ -1,57 +1,58 @@
-import React, { useCallback, useEffect, useState } from "react"
-import { AuthClient } from "@dfinity/auth-client"
+import React, { useEffect, useState } from "react"
 import dfinityLogo from "./assets/dfinity.svg"
 
 // Note: This is just a basic example to get you started
 function Auth() {
-  const [signedIn, setSignedIn] = useState<boolean>(false)
-  const [principal, setPrincipal] = useState<string>("")
-  const [client, setClient] = useState<any>()
 
-  const initAuth = async () => {
-    const client = await AuthClient.create()
-    const isAuthenticated = await client.isAuthenticated()
+  const whitelist: string[] = [];
+  const host = "https://mainnet.dfinity.network";
 
-    setClient(client)
+  const [signedIn, setSignedIn] = useState<boolean>(false);
+  const [publicKey, setPublicKey] = useState<string>("");
+  const [principal, setPrincipal] = useState<string>("");
+  const [plugClient, setPlugClient] = useState<any>((window as any).ic.plug);
 
-    if (isAuthenticated) {
-      const identity = client.getIdentity()
-      const principal = identity.getPrincipal().toString()
-      setSignedIn(true)
-      setPrincipal(principal)
+  const verifyPlugInterface = async () => {
+    if (!plugClient) {
+      const windowAsAny: any = window;
+      const windowIC = await windowAsAny.ic;
+      setPlugClient(windowIC.plug);
     }
   }
 
-  const signIn = async () => {
-    const { identity, principal } = await new Promise((resolve, reject) => {
-      client.login({
-        identityProvider: "https://identity.ic0.app",
-        onSuccess: () => {
-          const identity = client.getIdentity()
-          const principal = identity.getPrincipal().toString()
-          resolve({ identity, principal })
-        },
-        onError: reject,
-      })
-    })
-    setSignedIn(true)
-    setPrincipal(principal)
+  const signIn = async() => {
+    const publicKey = await plugClient.requestConnect({ whitelist, host });
+    setPublicKey(publicKey);
+    const principal = await plugClient.getPrincipal();
+    setPrincipal(principal.toString());
+    setSignedIn(true);
   }
 
-  const signOut = async () => {
-    await client.logout()
-    setSignedIn(false)
-    setPrincipal("")
+  const signOut = async() => {
+    await plugClient.disconnect();
+    setPublicKey("");
+    setPrincipal("");
+    setSignedIn(false);
+  }
+
+  const verifySignedIn = async () => {
+    const connected = await plugClient.isConnected();
+    if (!connected) {
+      setSignedIn(false);
+      await signIn();
+    }
   }
 
   useEffect(() => {
-    initAuth()
+    verifyPlugInterface().then((_) => {
+      verifySignedIn();
+    });
   }, [])
 
   return (
     <div className="auth-section">
 
-      {!signedIn && client ? (
+      {!signedIn && plugClient ? (
         <button onClick={signIn} className="auth-button">
           Sign in
           <img style={{ width: "33px", marginRight: "-1em", marginLeft: "0.7em" }} src={dfinityLogo} />
