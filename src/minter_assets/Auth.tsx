@@ -5,7 +5,7 @@ import dfinityLogo from "./assets/dfinity.svg"
 function Auth() {
 
   const whitelist: string[] = [];
-  const host = "https://mainnet.dfinity.network";
+  const host = (process.env["DFX_NETWORK"] == "ic") ? "https://mainnet.dfinity.network" : "localhost:8000";
 
   const [signedIn, setSignedIn] = useState<boolean>(false);
   const [publicKey, setPublicKey] = useState<string>("");
