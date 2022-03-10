@@ -73,10 +73,6 @@ export function Intro() {
         <button className="demo-button" onClick={onIncrementClick}>
           Count is: {count}
         </button>
-        <p style={{fontSize: "0.6em"}}>
-          This counter is running inside a canister
-        </p>
-        <p style={{fontSize: "0.4em"}}>by <a href="https://twitter.com/miamaruq">@miamaruq</a></p>
       </header>
     </>
   )

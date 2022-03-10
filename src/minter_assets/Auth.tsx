@@ -5,7 +5,7 @@ import dfinityLogo from "./assets/dfinity.svg"
 function Auth() {
 
   const whitelist: string[] = [];
-  const host = (process.env["DFX_NETWORK"] == "ic") ? "https://mainnet.dfinity.network" : "localhost:8000";
+  const host = (import.meta.env["DFX_NETWORK"] == "ic") ? "https://mainnet.dfinity.network" : "localhost:8000";
 
   const [signedIn, setSignedIn] = useState<boolean>(false);
   const [publicKey, setPublicKey] = useState<string>("");
@@ -26,13 +26,6 @@ function Auth() {
     const principal = await plugClient.getPrincipal();
     setPrincipal(principal.toString());
     setSignedIn(true);
-  }
-
-  const signOut = async() => {
-    await plugClient.disconnect();
-    setPublicKey("");
-    setPrincipal("");
-    setSignedIn(false);
   }
 
   const verifySignedIn = async () => {
@@ -62,7 +55,9 @@ function Auth() {
       {signedIn ? (
         <>
           <p>Signed in as: {principal}</p>
-          <button onClick={signOut} className="auth-button">Sign out</button>
+          <div className="auth-button">
+            <img style={{ width: "33px", marginRight: "-1em", marginLeft: "0.7em" }} src={dfinityLogo} />
+          </div>
         </>
       ) : null}
 
