@@ -1,17 +1,16 @@
 import React, {useEffect, useState} from "react"
-import {ToggleMenu} from "./ToggleMenu";
+import ToggleMenu from "./ToggleMenu";
 
 import dfinityLogo from "./assets/dfinity.svg"
 
 import { minter } from "canisters/minter"
 
-export function Minter() {
+export default function Minter() {
+    const [imageURL, setImageURL] = useState<string>("");
+    const [plugClient, setPlugClient] = useState<any>((window as any).ic.plug);
 
-    // const [imageURL, setImageURL] = useState<string>("");
-    // const [plugClient, setPlugClient] = useState<any>((window as any).ic.plug);
-
-    // useEffect(() => {
-    // }, [])
+    useEffect(() => {
+    }, [])
 
     const mintNFT = async () => {
         const imageURL = "";

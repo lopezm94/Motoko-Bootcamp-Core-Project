@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import dfinityLogo from "./assets/dfinity.svg"
 
 // Note: This is just a basic example to get you started
-function Auth() {
+export default function Auth() {
 
   const whitelist: string[] = [];
   const host = (import.meta.env["DFX_NETWORK"] == "ic") ? "https://mainnet.dfinity.network" : "localhost:8000";
@@ -64,5 +64,3 @@ function Auth() {
     </div>
   )
 }
-
-export { Auth }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { counter } from "canisters/counter"
 import logo from "./assets/logo-dark.svg"
 
-export function Intro() {
+export default function Intro() {
   const [count, setCount] = useState<string>()
 
   const refreshCounter = async () => {

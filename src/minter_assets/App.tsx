@@ -1,8 +1,8 @@
 import React from "react"
-import { Intro } from "./Intro"
-import {ToggleMenu} from "./ToggleMenu";
+import Intro from "./Intro"
+import ToggleMenu from "./ToggleMenu";
 
-function App() {
+export default function App() {
   return (
     <div className="App">
       <ToggleMenu />
@@ -10,5 +10,3 @@ function App() {
     </div>
   )
 }
-
-export default App

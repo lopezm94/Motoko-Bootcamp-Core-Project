@@ -1,7 +1,7 @@
 import React from "react"
-import {ToggleMenu} from "./ToggleMenu";
+import ToggleMenu from "./ToggleMenu";
 
-function Wallet() {
+export default function Wallet() {
   return (
     <>
       <ToggleMenu />
@@ -21,5 +21,3 @@ function Wallet() {
     </>
   )
 }
-
-export {Wallet}

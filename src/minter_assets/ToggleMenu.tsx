@@ -1,8 +1,8 @@
-import React, {PureComponent, RefObject, createRef} from 'react';
-import {BrowserRouter, Link} from "react-router-dom";
-import {Auth} from "./Auth";
+import React from 'react';
+import {Link} from "react-router-dom";
+import Auth from "./Auth";
 
-export function ToggleMenu () {
+export default function ToggleMenu () {
 
     return (
         <div className="menu-toggle-header">

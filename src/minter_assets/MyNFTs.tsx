@@ -1,7 +1,7 @@
 import React from "react"
-import {ToggleMenu} from "./ToggleMenu";
+import ToggleMenu from "./ToggleMenu";
 
-function MyNFTs() {
+export default function MyNFTs() {
   return (
     <>
       <ToggleMenu />
@@ -21,5 +21,3 @@ function MyNFTs() {
     </>
   )
 }
-
-export {MyNFTs}
