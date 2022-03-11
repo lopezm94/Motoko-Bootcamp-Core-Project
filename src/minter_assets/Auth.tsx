@@ -10,7 +10,6 @@ export default function Auth() {
   const host = (import.meta.env["DFX_NETWORK"] == "ic") ? "https://mainnet.dfinity.network" : "http://localhost:8000";
 
   const [signedIn, setSignedIn] = useState<boolean>(false);
-  const [publicKey, setPublicKey] = useState<string>("");
   const [principal, setPrincipal] = useState<string>("");
   const [plugClient, setPlugClient] = useState<any>((window as any).ic.plug);
 
@@ -23,16 +22,16 @@ export default function Auth() {
   }
 
   const signIn = async() => {
-    const publicKey = await plugClient.requestConnect({ whitelist, host });
+    await plugClient.requestConnect({ whitelist, host });
     await plugClient.createAgent({ whitelist, host });
     await plugClient.agent.fetchRootKey();
-    setPublicKey(publicKey);
     const principal = await plugClient.getPrincipal();
     setPrincipal(principal.toString());
     setSignedIn(true);
   }
 
   const verifySignedIn = async () => {
+    await verifyPlugInterface();
     const connected = await plugClient.isConnected();
     if (!connected) {
       setSignedIn(false);
@@ -41,9 +40,7 @@ export default function Auth() {
   }
 
   useEffect(() => {
-    verifyPlugInterface().then((_) => {
-      verifySignedIn();
-    });
+    verifySignedIn();
   }, [])
 
   return (
