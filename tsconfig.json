@@ -26,14 +26,8 @@
       "canisters/minter": [
         ".dfx/local/canisters/minter"
       ],
-      "canisters/did/minter": [
-        ".dfx/local/canisters/minter/minter.did.js"
-      ],
       "canisters/counter": [
         ".dfx/local/canisters/counter"
-      ],
-      "canisters/did/counter": [
-        ".dfx/local/canisters/counter/counter.did.js"
       ]
     }
   },
