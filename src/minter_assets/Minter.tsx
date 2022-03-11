@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {FormEvent, useEffect, useState} from "react"
 import ToggleMenu from "./ToggleMenu";
 
 import dfinityLogo from "./assets/dfinity.svg"
@@ -6,25 +6,27 @@ import dfinityLogo from "./assets/dfinity.svg"
 import { minter } from "canisters/minter"
 
 export default function Minter() {
-    const [imageURL, setImageURL] = useState<string>("");
-    const [plugClient, setPlugClient] = useState<any>((window as any).ic.plug);
+    const [imageSrc, setImageSrc] = useState<any>(dfinityLogo);
+    const [formImageURL, setFormImageURL] = useState<string>("");
+    const [mintedFlag, setMintedFlag] = useState<boolean>(false);
 
     useEffect(() => {
-    }, [])
+    }, []);
 
     const mintNFT = async () => {
-        const imageURL = "";
-        const plugClient: any = {};
-        console.log("The url we are trying to mint is " + imageURL);
+        const plugClient = (window as any).ic.plug;
+        console.log("The url we are trying to mint is " + formImageURL);
         const principal = await plugClient.getPrincipal();
-        const mintId = await minter.mint_principal(imageURL, principal);
+        const mintId = await minter.mint_principal(formImageURL, principal);
         console.log("The id is " + Number(mintId));
-
-        // document.getElementById("nft").src = await minter.tokenURI(mintId);
-        //
+        setImageSrc(await minter.tokenURI(mintId));
         // // Show some information about the minted image.
         // document.getElementById("greeting").innerText = "this nft owner is " + principal_string + "\nthis token id is " + Number(mintId);
-    }
+    };
+
+    const onMintClick = async () => {
+        await mintNFT();
+    };
 
     return (
       <>
@@ -40,13 +42,13 @@ export default function Minter() {
             flexDirection: "column",
             background: "rgb(220 218 224 / 25%)",
           }}>
-            <img id="nft" src={dfinityLogo} alt="bootcamp_logo"/>
+            <img id="nft" src={imageSrc} alt="bootcamp_logo"/>
             <form action="#">
                 <label htmlFor="name">Enter a tokenURI: &nbsp;</label>
-                {/*<input id="image_url" type="text" value={imageURL} onInput={(evt: FormEvent<any>) => setImageURL(evt.currentTarget.value)}/>*/}
+                <input id="image_url" type="text" value={formImageURL} onInput={(evt: FormEvent<any>) => setFormImageURL(evt.currentTarget.value)}/>
             </form>
             <div>
-                <button id="mint" type="submit">Mint</button>
+                <button id="mint" type="submit" onClick={onMintClick}>Mint</button>
             </div>
           </div>
         </header>
