@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react"
 import dfinityLogo from "./assets/dfinity.svg"
 
+import { canisterId as minterCanisterId } from "canisters/minter";
+
 // Note: This is just a basic example to get you started
 export default function Auth() {
 
-  const whitelist: string[] = [];
-  const host = (import.meta.env["DFX_NETWORK"] == "ic") ? "https://mainnet.dfinity.network" : "localhost:8000";
+  const whitelist: string[] = [minterCanisterId];
+  const host = (import.meta.env["DFX_NETWORK"] == "ic") ? "https://mainnet.dfinity.network" : "http://localhost:8000";
 
   const [signedIn, setSignedIn] = useState<boolean>(false);
   const [publicKey, setPublicKey] = useState<string>("");
@@ -22,6 +24,8 @@ export default function Auth() {
 
   const signIn = async() => {
     const publicKey = await plugClient.requestConnect({ whitelist, host });
+    await plugClient.createAgent({ whitelist, host });
+    await plugClient.agent.fetchRootKey();
     setPublicKey(publicKey);
     const principal = await plugClient.getPrincipal();
     setPrincipal(principal.toString());

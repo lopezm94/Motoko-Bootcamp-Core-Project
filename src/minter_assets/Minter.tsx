@@ -3,7 +3,7 @@ import ToggleMenu from "./ToggleMenu";
 
 import dfinityLogo from "./assets/dfinity.svg"
 
-import { minter } from "canisters/minter"
+import { canisterId as minterCanisterId, idlFactory as minterIdlFactory } from "canisters/minter";
 
 export default function Minter() {
     const [imageSrc, setImageSrc] = useState<any>(dfinityLogo);
@@ -15,9 +15,11 @@ export default function Minter() {
 
     const mintNFT = async () => {
         const plugClient = (window as any).ic.plug;
-        console.log("The url we are trying to mint is " + formImageURL);
-        const principal = await plugClient.getPrincipal();
-        const mintId = await minter.mint_principal(formImageURL, principal);
+        const minter = await plugClient.createActor({
+            canisterId: minterCanisterId,
+            interfaceFactory: minterIdlFactory,
+        });
+        const mintId = await minter.mint(formImageURL);
         console.log("The id is " + Number(mintId));
         setImageSrc(await minter.tokenURI(mintId));
         // // Show some information about the minted image.
