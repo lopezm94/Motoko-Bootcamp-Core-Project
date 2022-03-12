@@ -135,7 +135,16 @@ actor class DRC721(_name : Text, _symbol : Text) {
     };
 
     public shared ({caller}) func getRangeOfTokensStartingFromLast(start: Int, finish: Int) : async [(T.TokenId, Text)] {
-        let revRangeArray = Iter.toArray(Iter.revRange(tokenPk - start, tokenPk - finish));
+        if (tokenPk < start) {
+            return [];
+        };
+        let realStart = tokenPk - start;
+        let realFinish = if (tokenPk < finish) {
+            0;
+        } else {
+            tokenPk - finish;
+        };
+        let revRangeArray = Iter.toArray(Iter.revRange(realStart, realFinish));
         return Array.map<Int, (T.TokenId, Text)>(revRangeArray, func (x) {
             let natX = Int.abs(x);
             let tokenURI = tokenURIs.get(natX);

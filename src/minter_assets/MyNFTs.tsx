@@ -29,12 +29,9 @@ export default function MyNFTs() {
       interfaceFactory: minterIdlFactory,
     });
     try {
-      console.log("Hola");
       setFailedFlag(false);
       setLoadingFlag(true);
       let data = await minter.getMyTokens();
-      console.log("Chao");
-      console.log(data);
       setNFTEntries(data.map((x: any) => {
         return {
           id: Number(x[0]),
@@ -146,7 +143,7 @@ export default function MyNFTs() {
               <div>Loading...</div>
           ) : null}
           {!isLoading && !signedIn ? (
-              <div>Sign In</div>
+              <div>Must be signed In</div>
           ) : null}
         </div>
       </header>
