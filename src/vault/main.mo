@@ -12,17 +12,6 @@ import T "dip721_types";
 
 actor class DRC721(_name : Text, _symbol : Text) {
 
-    //Using DIP721 standard, adapted from https://github.com/SuddenlyHazel/DIP721/blob/main/src/DIP721/DIP721.mo
-    private stable var tokenPk : Nat = 0;
-
-    private stable var tokenURIEntries : [(T.TokenId, Text)] = [];
-    private stable var ownersEntries : [(T.TokenId, Principal)] = [];
-    private stable var balancesEntries : [(Principal, Nat)] = [];
-    private stable var tokenApprovalsEntries : [(T.TokenId, Principal)] = [];
-    private stable var operatorApprovalsEntries : [(Principal, [Principal])] = [];  
-
-    private let tokenURIs : HashMap.HashMap<T.TokenId, Text> = HashMap.fromIter<T.TokenId, Text>(tokenURIEntries.vals(), 10, Nat.equal, Hash.hash);
-    private let owners : HashMap.HashMap<T.TokenId, Principal> = HashMap.fromIter<T.TokenId, Principal>(ownersEntries.vals(), 10, Nat.equal, Hash.hash);
     private let balances : HashMap.HashMap<Principal, Nat> = HashMap.fromIter<Principal, Nat>(balancesEntries.vals(), 10, Principal.equal, Principal.hash);
     private let tokenApprovals : HashMap.HashMap<T.TokenId, Principal> = HashMap.fromIter<T.TokenId, Principal>(tokenApprovalsEntries.vals(), 10, Nat.equal, Hash.hash);
     private let operatorApprovals : HashMap.HashMap<Principal, [Principal]> = HashMap.fromIter<Principal, [Principal]>(operatorApprovalsEntries.vals(), 10, Principal.equal, Principal.hash);
@@ -135,15 +124,12 @@ actor class DRC721(_name : Text, _symbol : Text) {
     };
 
     public shared ({caller}) func getRangeOfTokensStartingFromLast(start: Int, finish: Int) : async [(T.TokenId, Text)] {
-        if (tokenPk == 0) {
-            return [];
-        };
         if (tokenPk < start) {
             return [];
         };
         let realStart = tokenPk - start;
         let realFinish = if (tokenPk < finish) {
-            1;
+            0;
         } else {
             tokenPk - finish;
         };

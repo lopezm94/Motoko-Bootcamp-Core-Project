@@ -1,16 +1,11 @@
 {
   "canisters": {
-    "counter": {
-      "main": "src/counter/main.mo",
-      "type": "motoko"
-    },
     "minter": {
       "main": "src/minter/main.mo",
       "type": "motoko"
     },
     "minter_assets": {
       "dependencies": [
-        "counter",
         "minter"
       ],
       "frontend": {

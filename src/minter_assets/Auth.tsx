@@ -6,7 +6,8 @@ import { canisterId as minterCanisterId } from "canisters/minter";
 // Note: This is just a basic example to get you started
 export default function Auth() {
 
-  const whitelist: string[] = [minterCanisterId];
+  const faucetCanisterId = "yeeiw-3qaaa-aaaah-qcvmq-cai";
+  const whitelist: string[] = [faucetCanisterId, minterCanisterId];
   const host = "https://mainnet.dfinity.network";
 
   const [signedIn, setSignedIn] = useState<boolean>(false);

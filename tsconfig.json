@@ -25,9 +25,6 @@
     "paths": {
       "canisters/minter": [
         ".dfx/local/canisters/minter"
-      ],
-      "canisters/counter": [
-        ".dfx/local/canisters/counter"
       ]
     }
   },
