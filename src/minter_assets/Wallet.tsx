@@ -1,10 +1,8 @@
 import React from "react"
-import ToggleMenu from "./ToggleMenu";
 
 export default function Wallet() {
   return (
     <>
-      <ToggleMenu />
       <header className="wallet-header">
         <p style={{ fontSize: "2em", marginBottom: "0.5em" }}>Wallet Page</p>
         <div style={{
@@ -16,6 +14,7 @@ export default function Wallet() {
           flexDirection: "column",
           background: "rgb(220 218 224 / 25%)",
         }}>
+          <iframe src="https://bootcamp-faucet.vercel.app/"></iframe>
         </div>
       </header>
     </>

@@ -13,7 +13,7 @@ export default function MyNFTs() {
   const [principal, setPrincipal] = useState<string>("");
 
   const whitelist: string[] = [minterCanisterId];
-  const host = (import.meta.env["DFX_NETWORK"] == "ic") ? "https://mainnet.dfinity.network" : "http://localhost:8000";
+  const host = "https://mainnet.dfinity.network";
 
   const verifyPlugInterface = async () => {
     if (!plugClient) {

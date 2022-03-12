@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import {Link} from "react-router-dom";
 
-import { minter } from "canisters/minter";
+import { minter, canisterId } from "canisters/minter";
 
 export default function Intro() {
   const [plugClient, setPlugClient] = useState<any>((window as any).ic.plug);
@@ -20,6 +20,9 @@ export default function Intro() {
   const loadNFTEntries = async () => {
     try {
       console.log("Hola");
+      console.log(canisterId);
+      const host = "https://mainnet.dfinity.network";
+      console.log(host);
       setFailedFlag(false);
       setLoadingFlag(true);
       let data = await minter.getRangeOfTokensStartingFromLast(BigInt(0), BigInt(50));
@@ -40,6 +43,7 @@ export default function Intro() {
 
   const verifyLoadedNFTs = async () => {
     await verifyPlugInterface();
+    if (isFailed) return;
     const loaded = nftEntries.length > 0;
     if (!loaded) {
       await loadNFTEntries();
@@ -47,7 +51,7 @@ export default function Intro() {
   }
 
   useEffect(() => {
-    // verifyLoadedNFTs();
+    verifyLoadedNFTs();
   }, [])
 
   verifyLoadedNFTs();

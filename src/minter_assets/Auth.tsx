@@ -7,7 +7,7 @@ import { canisterId as minterCanisterId } from "canisters/minter";
 export default function Auth() {
 
   const whitelist: string[] = [minterCanisterId];
-  const host = (import.meta.env["DFX_NETWORK"] == "ic") ? "https://mainnet.dfinity.network" : "http://localhost:8000";
+  const host = "https://mainnet.dfinity.network";
 
   const [signedIn, setSignedIn] = useState<boolean>(false);
   const [principal, setPrincipal] = useState<string>("");
