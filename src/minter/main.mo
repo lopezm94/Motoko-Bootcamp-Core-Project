@@ -1,7 +1,9 @@
+import Debug "mo:base/Debug";
 import Error "mo:base/Error";
 import Hash "mo:base/Hash";
 import HashMap "mo:base/HashMap";
 import Nat "mo:base/Nat";
+import Int "mo:base/Int";
 import Option "mo:base/Option";
 import Principal "mo:base/Principal";
 import Array "mo:base/Array";
@@ -106,18 +108,46 @@ actor class DRC721(_name : Text, _symbol : Text) {
         _transfer(from, to, tokenId);
     };
 
-    // Mint without authentication
-    public func mint_principal(uri : Text, principal : Principal) : async Nat {
-        tokenPk += 1;
-        _mint(principal, tokenPk, uri);
-        return tokenPk;
-    };
-
-    // Mint requires authentication in the frontend as we are using caller.
      public shared ({caller}) func mint(uri : Text) : async Nat {
         tokenPk += 1;
         _mint(caller, tokenPk, uri);
         return tokenPk;
+    };
+
+    public shared ({caller}) func getMyTokens() : async [(T.TokenId, Text)] {
+        Debug.print("Hola");
+        Debug.print(Principal.toText(caller));
+        tokenURIEntries := Iter.toArray(tokenURIs.entries());
+        ownersEntries := Iter.toArray(owners.entries());
+        let ownedEntries: [(T.TokenId, Principal)] = Array.filter<(T.TokenId, Principal)>(ownersEntries, func (x) {return x.1 == caller});
+        let ownedTokenIds = Array.map<(T.TokenId, Principal), T.TokenId>(ownedEntries, func (x) {return x.0});
+        return Array.map<T.TokenId, (T.TokenId, Text)>(ownedTokenIds, func (x) {
+            let tokenURI = tokenURIs.get(x);
+            return switch(tokenURI) {
+                case(null) {
+                    // Should not happen, I should in fact trap this but idk how
+                    (x, "Resource not found");
+                }; case(?tokenURI) {
+                    (x, tokenURI);
+                }
+            }
+        });
+    };
+
+    public shared ({caller}) func getRangeOfTokensStartingFromLast(start: Int, finish: Int) : async [(T.TokenId, Text)] {
+        let revRangeArray = Iter.toArray(Iter.revRange(tokenPk - start, tokenPk - finish));
+        return Array.map<Int, (T.TokenId, Text)>(revRangeArray, func (x) {
+            let natX = Int.abs(x);
+            let tokenURI = tokenURIs.get(natX);
+            return switch(tokenURI) {
+                case(null) {
+                    // Should not happen, I should in fact trap this but idk how
+                    (natX, "Resource not found");
+                }; case(?tokenURI) {
+                    (natX, tokenURI);
+                }
+            }
+        });
     };
 
 

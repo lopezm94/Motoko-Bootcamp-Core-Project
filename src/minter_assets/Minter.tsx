@@ -11,6 +11,7 @@ export default function Minter() {
     const [formImageURL, setFormImageURL] = useState<string>("");
     const [mintId, setMintId] = useState<number | null>(null);
     const [isMinting, setMintingFlag] = useState<boolean>(false);
+    const [isFailed, setFailedFlag] = useState<boolean>(false);
 
     useEffect(() => {
     }, []);
@@ -20,12 +21,16 @@ export default function Minter() {
             canisterId: minterCanisterId,
             interfaceFactory: minterIdlFactory,
         });
-        setMintingFlag(true)
+        setFailedFlag(false);
+        setMintingFlag(true);
         try {
             const mintId = await minter.mint(formImageURL);
             console.log("The id is " + Number(mintId));
             setImageSrc(await minter.tokenURI(mintId));
-            setMintId(mintId);
+            setMintId(Number(mintId));
+        } catch(e) {
+            setImageSrc(dfinityLogo);
+            setFailedFlag(true);
         } finally {
             setMintingFlag(false);
         }
@@ -59,13 +64,16 @@ export default function Minter() {
                   <div>
                       <button id="mint" type="submit" onClick={onMintClick}>Mint</button>
                   </div>
-                  {mintId != null ? (
+                  {!isFailed && mintId != null ? (
                       <div>Minted token id: {mintId}</div>
                   ) : null}
                   </div>
               ) : null}
               {isMinting ? (
                   <div>Minting...</div>
+              ) : null}
+              {isFailed ? (
+                  <div>Error minting NFT, log in or try again</div>
               ) : null}
           </div>
         </header>
